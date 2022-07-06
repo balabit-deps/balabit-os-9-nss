@@ -1,0 +1,49 @@
+commit 16996a9156c9ff2924bdb19ff43d40617a41c912
+Author: Vineetha Kamath <vineetha.hari.pai@canonical.com>
+Date:   Tue Jul 23 15:32:32 2019 -0400
+
+From: Vineetha Kamath<vineetha.hari.pai@canonical.com>
+Decription: Disable libgcrypt reading /proc/sys/crypto/fips_enabled
+file and going into FIPS mode. libnss is not a FIPS
+certified library.
+Bug-Ubuntu: http://bugs.launchpad.net/bugs/1837734
+Forwarded: not-needed
+
+Index: nss/nss/lib/freebl/nsslowhash.c
+===================================================================
+--- nss.orig/nss/lib/freebl/nsslowhash.c	2020-07-17 10:46:37.964346182 -0400
++++ nss/nss/lib/freebl/nsslowhash.c	2020-07-17 10:46:37.960346213 -0400
+@@ -27,11 +27,13 @@
+ nsslow_GetFIPSEnabled(void)
+ {
+ #ifdef LINUX
+-    FILE *f;
++    FILE *f = NULL;
+     char d;
+     size_t size;
+ 
++#if 0
+     f = fopen("/proc/sys/crypto/fips_enabled", "r");
++#endif
+     if (!f)
+         return 0;
+ 
+Index: nss/nss/lib/sysinit/nsssysinit.c
+===================================================================
+--- nss.orig/nss/lib/sysinit/nsssysinit.c	2020-07-17 10:46:37.964346182 -0400
++++ nss/nss/lib/sysinit/nsssysinit.c	2020-07-17 10:46:59.844174516 -0400
+@@ -171,11 +171,13 @@
+ getFIPSMode(void)
+ {
+ #ifndef NSS_FIPS_DISABLED
+-    FILE *f;
++    FILE *f = NULL;
+     char d;
+     size_t size;
+ 
++#if 0
+     f = fopen("/proc/sys/crypto/fips_enabled", "r");
++#endif
+     if (!f) {
+         /* if we don't have a proc flag, fall back to the
+      * environment variable */

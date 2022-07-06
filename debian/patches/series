@@ -1,0 +1,10 @@
+38_hurd.patch
+80_security_tools.patch
+85_security_load.patch
+38_hppa.patch
+99_compat.patch
+disable_fips_enabled_read.patch
+set-tls1.2-as-minimum.patch
+fix-ftbfs-s390x.patch
+fix-ftbfs-glibc-invalid-oob-error.patch
+CVE-2022-34480.patch

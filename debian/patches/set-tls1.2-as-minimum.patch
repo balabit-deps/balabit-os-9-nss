@@ -1,0 +1,21 @@
+Description: Set TLSv1.2 as minimum TLS version. LP: #1856428
+ Ubuntu patch forwarded to Debian (see the Bug-Debian below) but not
+ forwarded upstream, as this is likely not-a-bug from their perspective.
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1856428
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991562
+Forwarded: not-needed
+
+
+Index: nss-3.48-1ubuntu1/nss/lib/ssl/sslsock.c
+===================================================================
+--- nss-3.48-1ubuntu1.orig/nss/lib/ssl/sslsock.c
++++ nss-3.48-1ubuntu1/nss/lib/ssl/sslsock.c
+@@ -101,7 +101,7 @@ static sslOptions ssl_defaults = {
+  * default range of enabled SSL/TLS protocols
+  */
+ static SSLVersionRange versions_defaults_stream = {
+-    SSL_LIBRARY_VERSION_TLS_1_0,
++    SSL_LIBRARY_VERSION_TLS_1_2,
+     SSL_LIBRARY_VERSION_TLS_1_3
+ };
+ 

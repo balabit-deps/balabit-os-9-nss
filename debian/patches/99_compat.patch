@@ -1,0 +1,67 @@
+Index: nss/nss/lib/ssl/sslinfo.c
+===================================================================
+--- nss.orig/nss/lib/ssl/sslinfo.c
++++ nss/nss/lib/ssl/sslinfo.c
+@@ -2,6 +2,8 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#define NSS_CHANNEL_INFO_FIPS
+ #include "pk11pub.h"
+ #include "ssl.h"
+ #include "sslimpl.h"
+Index: nss/nss/lib/ssl/sslt.h
+===================================================================
+--- nss.orig/nss/lib/ssl/sslt.h
++++ nss/nss/lib/ssl/sslt.h
+@@ -373,10 +373,12 @@ typedef struct SSLChannelInfoStr {
+      * with TLS 1.3 Encrypted Client Hello. */
+     PRBool echAccepted;
+ 
++#ifdef NSS_CHANNEL_INFO_FIPS
+     /* The following field was added in NSS 3.66 */
+     /* This filed is PR_TRUE if the FIPS indicator is true for the
+      * current connection */
+     PRBool isFIPS;
++#endif
+ 
+     /* When adding new fields to this structure, please document the
+      * NSS version in which they were added. */
+Index: nss/nss/cmd/selfserv/selfserv.c
+===================================================================
+--- nss.orig/nss/cmd/selfserv/selfserv.c
++++ nss/nss/cmd/selfserv/selfserv.c
+@@ -8,6 +8,8 @@
+  *  3 -r's mean request, not require, on second handshake.
+  *  4 -r's mean request  and require, on second handshake.
+  */
++#define NSS_CHANNEL_INFO_FIPS
++
+ #include <stdio.h>
+ #include <string.h>
+ 
+Index: nss/nss/cmd/strsclnt/strsclnt.c
+===================================================================
+--- nss.orig/nss/cmd/strsclnt/strsclnt.c
++++ nss/nss/cmd/strsclnt/strsclnt.c
+@@ -1,6 +1,7 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++#define NSS_CHANNEL_INFO_FIPS
+ #include <stdio.h>
+ #include <string.h>
+ 
+Index: nss/nss/cmd/tstclnt/tstclnt.c
+===================================================================
+--- nss.orig/nss/cmd/tstclnt/tstclnt.c
++++ nss/nss/cmd/tstclnt/tstclnt.c
+@@ -7,6 +7,7 @@
+ ** Sample client side test program that uses SSL and NSS
+ **
+ */
++#define NSS_CHANNEL_INFO_FIPS
+ 
+ #include "secutil.h"
+ #include "basicutil.h"
