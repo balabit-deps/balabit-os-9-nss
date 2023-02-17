@@ -8,3 +8,4 @@ set-tls1.2-as-minimum.patch
 fix-ftbfs-s390x.patch
 fix-ftbfs-glibc-invalid-oob-error.patch
 CVE-2022-34480.patch
+CVE-2023-0767.patch

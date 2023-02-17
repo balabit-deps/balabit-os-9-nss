@@ -1,3 +1,13 @@
+nss (2:3.68.2-0ubuntu1.2) jammy-security; urgency=medium
+
+  * SECURITY UPDATE: Arbitrary memory write via PKCS 12 in NSS
+    - debian/patches/CVE-2023-0767.patch: improve handling of unknown
+      PKCS#12 safe bag types in nss/lib/pkcs12/p12d.c,
+      nss/lib/pkcs12/p12t.h, nss/lib/pkcs12/p12tmpl.c.
+    - CVE-2023-0767
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Fri, 17 Feb 2023 09:50:18 -0500
+
 nss (2:3.68.2-0ubuntu1.1) jammy-security; urgency=medium
 
   * SECURITY UPDATE: Free of uninitialized pointer in lg_init
