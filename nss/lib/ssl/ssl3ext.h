@@ -30,6 +30,16 @@ typedef struct {
     sslExtensionBuilderFunc ex_sender;
 } sslExtensionBuilder;
 
+/* RFC 8879: TLS Certificate Compression - 3. Negotiating Certificate Compression 
+** enum {
+**  zlib(1),
+**  brotli(2),
+**  zstd(3),
+**  (65535)
+** } CertificateCompressionAlgorithm; 
+*/
+typedef PRUint16 SSLCertificateCompressionAlgorithmID;
+
 struct TLSExtensionDataStr {
     /* registered callbacks that send server hello extensions */
     sslExtensionBuilder serverHelloSenders[SSL_MAX_EXTENSIONS];
@@ -38,7 +48,9 @@ struct TLSExtensionDataStr {
 
     /* Keep track of the extensions that are advertised or negotiated. */
     PRUint16 numAdvertised;
-    PRUint16 *advertised; /* Allocated dynamically. */
+    PRUint16 *advertised;      /* Allocated dynamically. */
+    PRUint16 echNumAdvertised; /* Tracks Xtns offered in ClientHelloInner. */
+    PRUint16 *echAdvertised;
     PRUint16 numNegotiated;
     PRUint16 negotiated[SSL_MAX_EXTENSIONS];
 
@@ -97,6 +109,7 @@ struct TLSExtensionDataStr {
 
     PRUint16 dtlsSRTPCipherSuite; /* 0 if not selected */
 
+    unsigned int echXtnOffset;  /* The start of the ECH Xtn (if any) */
     unsigned int lastXtnOffset; /* Where to insert any other extensions.
                                  * 0 = end, otherwise base of PSK xtn. */
     PRCList remoteKeyShares;    /* The other side's public keys (TLS 1.3) */
@@ -134,6 +147,10 @@ struct TLSExtensionDataStr {
     /* ECH working state. Non-null when a valid Encrypted Client Hello extension
      * was received. */
     sslEchXtnState *ech;
+
+    /* The compression algorithm that will be used to encode certificates. */
+    SSLCertificateCompressionAlgorithmID compressionAlg;
+    PRBool certificateCompressionAdvertised;
 };
 
 typedef struct TLSExtensionStr {
@@ -200,5 +217,10 @@ SECStatus SSLExp_GetExtensionSupport(PRUint16 type,
 SECStatus SSLExp_InstallExtensionHooks(
     PRFileDesc *fd, PRUint16 extension, SSLExtensionWriter writer,
     void *writerArg, SSLExtensionHandler handler, void *handlerArg);
+sslCustomExtensionHooks *ssl_FindCustomExtensionHooks(sslSocket *ss, PRUint16 extension);
+SECStatus ssl_CallCustomExtensionSenders(sslSocket *ss, sslBuffer *buf,
+                                         SSLHandshakeType message);
+SECStatus tls_ClientHelloExtensionPermutationSetup(sslSocket *ss);
+void tls_ClientHelloExtensionPermutationDestroy(sslSocket *ss);
 
 #endif

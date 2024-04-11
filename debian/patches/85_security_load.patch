@@ -2,30 +2,30 @@
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Load modules from $ORIGIN/nss.
+##
+## Updated: 2024-04-11
 
-Index: nss/nss/cmd/shlibsign/shlibsign.c
-===================================================================
---- nss.orig/nss/cmd/shlibsign/shlibsign.c
-+++ nss/nss/cmd/shlibsign/shlibsign.c
-@@ -49,6 +49,9 @@
- /* freebl headers */
- #include "shsign.h"
+--- a/nss/cmd/shlibsign/shlibsign.c
++++ b/nss/cmd/shlibsign/shlibsign.c
+@@ -55,6 +55,9 @@
+ /* nss headers for definition of HASH_HashType */
+ #include "hasht.h"
  
 +/* nssutil headers */
 +#include "secport.h"
 +
- #define NUM_ELEM(array) (sizeof(array) / sizeof(array[0]))
- CK_BBOOL true = CK_TRUE;
- CK_BBOOL false = CK_FALSE;
-@@ -706,7 +709,6 @@ main(int argc, char **argv)
+ CK_BBOOL cktrue = CK_TRUE;
+ CK_BBOOL ckfalse = CK_FALSE;
+ static PRBool verbose = PR_FALSE;
+@@ -1245,7 +1248,6 @@ main(int argc, char **argv)
  {
      PLOptState *optstate;
      char *program_name;
 -    char *libname = NULL;
      PRLibrary *lib = NULL;
-     PRFileDesc *fd;
-     PRStatus rv = PR_SUCCESS;
-@@ -864,22 +866,21 @@ main(int argc, char **argv)
+     PRFileDesc *ifd = NULL;
+     PRFileDesc *ofd = NULL;
+@@ -1400,22 +1402,21 @@ main(int argc, char **argv)
          return 1;
      }
  
@@ -56,13 +56,11 @@ Index: nss/nss/cmd/shlibsign/shlibsign.c
  
      if (FIPSMODE) {
          /* FIPSMODE == FC_GetFunctionList */
-Index: nss/nss/lib/pk11wrap/pk11load.c
-===================================================================
---- nss.orig/nss/lib/pk11wrap/pk11load.c
-+++ nss/nss/lib/pk11wrap/pk11load.c
-@@ -468,6 +468,13 @@ secmod_LoadPKCS11Module(SECMODModule *mo
-          * unload the library if anything goes wrong from here on out...
-          */
+--- a/nss/lib/pk11wrap/pk11load.c
++++ b/nss/lib/pk11wrap/pk11load.c
+@@ -485,6 +485,13 @@ secmod_LoadPKCS11Module(SECMODModule *mo
+         }
+ #else
          library = PR_LoadLibrary(mod->dllName);
 +        if ((library == NULL) &&
 +            !rindex(mod->dllName, PR_GetDirectorySeparator())) {
@@ -71,13 +69,11 @@ Index: nss/nss/lib/pk11wrap/pk11load.c
 +                                       mod->dllName);
 +        }
 +
+ #endif // defined(_WIN32)
          mod->library = (void *)library;
  
-         if (library == NULL) {
-Index: nss/nss/lib/util/secload.c
-===================================================================
---- nss.orig/nss/lib/util/secload.c
-+++ nss/nss/lib/util/secload.c
+--- a/nss/lib/util/secload.c
++++ b/nss/lib/util/secload.c
 @@ -65,14 +65,19 @@ loader_LoadLibInReferenceDir(const char*
  {
      PRLibrary* dlh = NULL;
@@ -116,7 +112,7 @@ Index: nss/nss/lib/util/secload.c
 @@ -89,6 +100,10 @@ loader_LoadLibInReferenceDir(const char*
                                                         | PR_LD_ALT_SEARCH_PATH
  #endif
-                                           );
+             );
 +            if (! dlh) {
 +                strcpy(fullName + referencePathSize, name);
 +                dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL);
@@ -124,10 +120,8 @@ Index: nss/nss/lib/util/secload.c
              PORT_Free(fullName);
          }
      }
-Index: nss/nss/cmd/shlibsign/Makefile
-===================================================================
---- nss.orig/nss/cmd/shlibsign/Makefile
-+++ nss/nss/cmd/shlibsign/Makefile
+--- a/nss/cmd/shlibsign/Makefile
++++ b/nss/cmd/shlibsign/Makefile
 @@ -30,6 +30,7 @@ EXTRA_LIBS += \
  	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plc4.$(LIB_SUFFIX) \
  	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)plds4.$(LIB_SUFFIX) \
@@ -145,10 +139,8 @@ Index: nss/nss/cmd/shlibsign/Makefile
  	$(NULL)
  
  endif
-Index: nss/nss/cmd/shlibsign/manifest.mn
-===================================================================
---- nss.orig/nss/cmd/shlibsign/manifest.mn
-+++ nss/nss/cmd/shlibsign/manifest.mn
+--- a/nss/cmd/shlibsign/manifest.mn
++++ b/nss/cmd/shlibsign/manifest.mn
 @@ -8,7 +8,13 @@ CORE_DEPTH = ../..
  # MODULE public and private header  directories are implicitly REQUIRED.
  MODULE = nss

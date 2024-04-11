@@ -8,31 +8,11 @@ file and going into FIPS mode. libnss is not a FIPS
 certified library.
 Bug-Ubuntu: http://bugs.launchpad.net/bugs/1837734
 Forwarded: not-needed
+Updated: 2024-03-21
 
-Index: nss/nss/lib/freebl/nsslowhash.c
-===================================================================
---- nss.orig/nss/lib/freebl/nsslowhash.c	2020-07-17 10:46:37.964346182 -0400
-+++ nss/nss/lib/freebl/nsslowhash.c	2020-07-17 10:46:37.960346213 -0400
-@@ -27,11 +27,13 @@
- nsslow_GetFIPSEnabled(void)
- {
- #ifdef LINUX
--    FILE *f;
-+    FILE *f = NULL;
-     char d;
-     size_t size;
- 
-+#if 0
-     f = fopen("/proc/sys/crypto/fips_enabled", "r");
-+#endif
-     if (!f)
-         return 0;
- 
-Index: nss/nss/lib/sysinit/nsssysinit.c
-===================================================================
---- nss.orig/nss/lib/sysinit/nsssysinit.c	2020-07-17 10:46:37.964346182 -0400
-+++ nss/nss/lib/sysinit/nsssysinit.c	2020-07-17 10:46:59.844174516 -0400
-@@ -171,11 +171,13 @@
+--- a/nss/lib/sysinit/nsssysinit.c
++++ b/nss/lib/sysinit/nsssysinit.c
+@@ -171,11 +171,13 @@ static PRBool
  getFIPSMode(void)
  {
  #ifndef NSS_FIPS_DISABLED
@@ -47,3 +27,35 @@ Index: nss/nss/lib/sysinit/nsssysinit.c
      if (!f) {
          /* if we don't have a proc flag, fall back to the
       * environment variable */
+--- a/nss/lib/freebl/stubs.c
++++ b/nss/lib/freebl/stubs.c
+@@ -737,10 +737,12 @@ NSS_GetSystemFIPSEnabled_stub(void)
+  * as they become available/known */
+ #ifdef LINUX
+     {
+-        FILE *f;
++        FILE *f = NULL;
+         char d;
+         size_t size;
++#if 0
+         f = fopen("/proc/sys/crypto/fips_enabled", "r");
++#endif
+         if (!f)
+             return PR_FALSE;
+ 
+--- a/nss/lib/util/secport.c
++++ b/nss/lib/util/secport.c
+@@ -905,10 +905,12 @@ NSS_GetSystemFIPSEnabled(void)
+  * as they become available/known */
+ #ifdef LINUX
+     {
+-        FILE *f;
++        FILE *f = NULL;
+         char d;
+         size_t size;
++#if 0
+         f = fopen("/proc/sys/crypto/fips_enabled", "r");
++#endif
+         if (!f)
+             return PR_FALSE;
+ 

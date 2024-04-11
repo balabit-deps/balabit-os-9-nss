@@ -1,17 +1,16 @@
 Description: fix double definition of BYTE_ORDER on hppa
 Author: Helge Deller <deller@gmx.de>
 Bug-Debian: https://bugs.debian.org/808990
+Updated: 2024-03-21
 
-Index: nss/nss/lib/dbm/include/mcom_db.h
-===================================================================
---- nss.orig/nss/lib/dbm/include/mcom_db.h
-+++ nss/nss/lib/dbm/include/mcom_db.h
+--- a/nss/lib/dbm/include/mcom_db.h
++++ b/nss/lib/dbm/include/mcom_db.h
 @@ -110,7 +110,7 @@ typedef PRUint32 uint32;
  #endif /* !BYTE_ORDER */
  #endif /* __sun */
  
 -#if defined(__hpux) || defined(__hppa)
 +#if defined(__hpux)
+ #ifndef BYTE_ORDER
  #define BYTE_ORDER BIG_ENDIAN
  #define BIG_ENDIAN 4321
- #define LITTLE_ENDIAN 1234 /* LSB first: i386, vax, all NT risc */

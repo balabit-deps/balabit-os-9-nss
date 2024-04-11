@@ -1,3 +1,31 @@
+nss (2:3.98-0ubuntu0.22.04.2) jammy-security; urgency=medium
+
+  * SECURITY REGRESSION: failure to open modules (LP: #2060906)
+    - debian/patches/85_security_load.patch: fix broken patch preventing
+      module loading.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 11 Apr 2024 10:19:22 -0400
+
+nss (2:3.98-0ubuntu0.22.04.1) jammy-security; urgency=medium
+
+  * Updated to upstream 3.98 to fix security issues and get a new CA
+    certificate bundle.
+    - CVE-2023-5388: timing issue in RSA operations
+    - CVE-2023-6135: side-channel in multiple NSS NIST curves
+  * Removed patches included in new version:
+    - debian/patches/set-tls1.2-as-minimum.patch
+    - debian/patches/CVE-2022-34480.patch
+    - debian/patches/CVE-2023-0767.patch
+  * Updated patches for new version:
+    - debian/patches/38_hppa.patch
+    - debian/patches/85_security_load.patch
+    - debian/patches/disable_fips_enabled_read.patch
+    - debian/patches/fix-ftbfs-s390x.patch
+  * debian/control: bump libnspr version to 2:4.34.
+  * debian/libnss3.symbols: added new symbols.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 21 Mar 2024 09:44:10 -0400
+
 nss (2:3.68.2-0ubuntu1.2) jammy-security; urgency=medium
 
   * SECURITY UPDATE: Arbitrary memory write via PKCS 12 in NSS

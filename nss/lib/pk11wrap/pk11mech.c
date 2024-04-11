@@ -32,9 +32,8 @@ typedef struct {
     int iv;
 } pk11MechanismData;
 
-static pk11MechanismData pk11_default =
-    { CKM_GENERIC_SECRET_KEY_GEN, CKK_GENERIC_SECRET,
-      CKM_FAKE_RANDOM, CKM_FAKE_RANDOM, 8, 8 };
+static pk11MechanismData pk11_default = { CKM_GENERIC_SECRET_KEY_GEN, CKK_GENERIC_SECRET,
+                                          CKM_FAKE_RANDOM, CKM_FAKE_RANDOM, 8, 8 };
 static pk11MechanismData *pk11_MechanismTable = NULL;
 static int pk11_MechTableSize = 0;
 static int pk11_MechEntrySize = 0;
@@ -235,7 +234,7 @@ PK11_GetKeyType(CK_MECHANISM_TYPE type, unsigned long len)
         case CKM_CHACHA20_POLY1305:
         case CKM_CHACHA20_KEY_GEN:
         case CKM_CHACHA20:
-            return CKK_NSS_CHACHA20;
+            return CKK_CHACHA20;
         case CKM_AES_ECB:
         case CKM_AES_CBC:
         case CKM_AES_CCM:
@@ -425,6 +424,8 @@ PK11_GetKeyType(CK_MECHANISM_TYPE type, unsigned long len)
         case CKM_TLS_PRF_GENERAL:
         case CKM_NSS_TLS_PRF_GENERAL_SHA256:
             return CKK_GENERIC_SECRET;
+        case CKM_NSS_KYBER_KEY_PAIR_GEN:
+            return CKK_NSS_KYBER;
         default:
             return pk11_lookup(type)->keyType;
     }
