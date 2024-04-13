@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include "kyber.h"
 #include "pk11_keygen.h"
 
 #include "pk11pub.h"
@@ -38,8 +39,8 @@ void Pkcs11KeyPairGenerator::GenerateKey(ScopedSECKEYPrivateKey* priv_key,
   ScopedSECKEYPrivateKey priv_tmp(
       PK11_GenerateKeyPair(slot.get(), mech_, params->get(), &pub_tmp, PR_FALSE,
                            sensitive ? PR_TRUE : PR_FALSE, nullptr));
-  ASSERT_NE(nullptr, priv_tmp) << "PK11_GenerateKeyPair failed: "
-                               << PORT_ErrorToName(PORT_GetError());
+  ASSERT_NE(nullptr, priv_tmp)
+      << "PK11_GenerateKeyPair failed: " << PORT_ErrorToName(PORT_GetError());
   ASSERT_NE(nullptr, pub_tmp);
 
   priv_key->swap(priv_tmp);
@@ -104,6 +105,15 @@ class EcParamHolder : public ParamHolder {
   std::unique_ptr<uint8_t[]> extra_;
 };
 
+class KyberParamHolder : public ParamHolder {
+ public:
+  KyberParamHolder(CK_NSS_KEM_PARAMETER_SET_TYPE aParams) : mParams(aParams) {}
+  void* get() override { return &mParams; }
+
+ private:
+  CK_NSS_KEM_PARAMETER_SET_TYPE mParams;
+};
+
 std::unique_ptr<ParamHolder> Pkcs11KeyPairGenerator::MakeParams() const {
   switch (mech_) {
     case CKM_RSA_PKCS_KEY_PAIR_GEN:
@@ -135,6 +145,11 @@ std::unique_ptr<ParamHolder> Pkcs11KeyPairGenerator::MakeParams() const {
     case CKM_EC_KEY_PAIR_GEN:
       std::cerr << "Generate EC pair on " << curve_ << std::endl;
       return std::unique_ptr<ParamHolder>(new EcParamHolder(curve_));
+
+    case CKM_NSS_KYBER_KEY_PAIR_GEN:
+      std::cerr << "Generate Kyber768 pair" << std::endl;
+      return std::unique_ptr<ParamHolder>(
+          new KyberParamHolder(CKP_NSS_KYBER_768_ROUND3));
 
     default:
       ADD_FAILURE() << "unknown OID " << mech_;

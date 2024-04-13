@@ -11,6 +11,7 @@
       'target_name': 'pk11_gtest',
       'type': 'executable',
       'sources': [
+        'json_reader.cc',
         'pk11_aes_cmac_unittest.cc',
         'pk11_aes_gcm_unittest.cc',
         'pk11_aeskeywrap_unittest.cc',
@@ -33,6 +34,7 @@
         'pk11_ike_unittest.cc',
         'pk11_import_unittest.cc',
         'pk11_kbkdf.cc',
+        'pk11_kem_unittest.cc',
         'pk11_keygen.cc',
         'pk11_key_unittest.cc',
         'pk11_module_unittest.cc',
@@ -44,6 +46,7 @@
         'pk11_rsapkcs1_unittest.cc',
         'pk11_rsapss_unittest.cc',
         'pk11_seed_cbc_unittest.cc',
+        'pk11_symkey_unittest.cc',
         'pk11_signature_test.cc',
         '<(DEPTH)/gtests/common/gtests.cc'
       ],
@@ -72,6 +75,9 @@
             '<(DEPTH)/lib/nss/nss.gyp:nss3',
             '<(DEPTH)/lib/ssl/ssl.gyp:ssl3',
           ],
+        }],
+        ['ct_verif==1', {
+            'defines': ['CT_VERIF'],
         }],
       ],
     }
