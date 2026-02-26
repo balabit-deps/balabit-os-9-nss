@@ -6,3 +6,4 @@
 disable_fips_enabled_read.patch
 fix-ftbfs-s390x.patch
 fix-ftbfs-glibc-invalid-oob-error.patch
+CVE-2026-2781.patch

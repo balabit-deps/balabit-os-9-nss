@@ -1,3 +1,12 @@
+nss (2:3.98-0ubuntu0.22.04.3) jammy-security; urgency=medium
+
+  * SECURITY UPDATE: integer overflow in platform-independent ghash
+    - debian/patches/CVE-2026-2781.patch: properly cast len in
+      nss/lib/freebl/gcm.c.
+    - CVE-2026-2781
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 26 Feb 2026 13:28:10 -0500
+
 nss (2:3.98-0ubuntu0.22.04.2) jammy-security; urgency=medium
 
   * SECURITY REGRESSION: failure to open modules (LP: #2060906)
