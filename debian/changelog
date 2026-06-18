@@ -1,3 +1,12 @@
+nss (2:3.98-0ubuntu0.22.04.4) jammy-security; urgency=medium
+
+  * SECURITY UPDATE: OOB read in pk11uri_ParseAttributes
+    - debian/patches/CVE-2026-12318.patch: improve handling of escape
+      sequences in nss/lib/util/pkcs11uri.c.
+    - CVE-2026-12318
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 18 Jun 2026 07:26:25 -0400
+
 nss (2:3.98-0ubuntu0.22.04.3) jammy-security; urgency=medium
 
   * SECURITY UPDATE: integer overflow in platform-independent ghash
