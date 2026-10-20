@@ -8,3 +8,4 @@ fix-ftbfs-s390x.patch
 fix-ftbfs-glibc-invalid-oob-error.patch
 CVE-2026-2781.patch
 CVE-2026-12318.patch
+certdata-remove-compromised-certs.patch

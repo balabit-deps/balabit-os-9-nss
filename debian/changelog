@@ -1,3 +1,13 @@
+nss (2:3.98-0ubuntu0.22.04.5) jammy-security; urgency=medium
+
+  * d/p/certdata-remove-compromised-certs.patch: remove the following
+    CA certs from ckfw/builtins/certdata due to intermediate cert
+    compromise
+    + "emSign ECC Root CA - G3"
+    + "Comodo AAA Services root"
+
+ -- Elise Hlady <elise.hlady@canonical.com>  Tue, 20 Oct 2026 16:15:32 -0700
+
 nss (2:3.98-0ubuntu0.22.04.4) jammy-security; urgency=medium
 
   * SECURITY UPDATE: OOB read in pk11uri_ParseAttributes
